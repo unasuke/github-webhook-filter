@@ -19,8 +19,6 @@ export interface Env {
   // MY_BUCKET: R2Bucket;
 }
 
-const webhookUrl = "https://example.com";
-
 export default {
   async fetch(
     request: Request,
@@ -30,7 +28,6 @@ export default {
     const body = await request.json();
     const defaultBranch = body.repository.default_branch;
     const defaultRef = `refs/heads/${defaultBranch}`;
-    console.log(defaultRef);
 
     if (body.ref !== defaultRef) {
       // Not the default branch
@@ -39,13 +36,16 @@ export default {
       });
     } else {
       // If defualt branch
-      const resp = await fetch(webhookUrl, {
-        method: "POST",
-        headers: request.headers,
-        body: JSON.stringify(body),
-      });
-      console.info(await resp.text());
-      console.info(await resp.headers);
+      const setting = JSON.parse(REPO_GROUP).find(
+        (group) => group.repo === body.repository.full_name
+      );
+      if (setting !== undefined) {
+        await fetch(setting.webhook, {
+          method: "POST",
+          headers: request.headers,
+          body: JSON.stringify(body),
+        });
+      }
       return new Response("", { status: 200 });
     }
   },
