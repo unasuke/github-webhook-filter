@@ -31,20 +31,23 @@ export default {
 
     if (body.ref !== defaultRef) {
       // Not the default branch
+      console.log("Not the default branch. Ignore it.");
       return new Response("", {
         status: 200,
       });
     } else {
       // If defualt branch
+      console.log("Push event to default branch.");
       const setting = JSON.parse(env.REPO_GROUP).find(
         (group) => group.repo === body.repository.full_name
       );
       if (setting !== undefined) {
-        await fetch(setting.webhook, {
+        const resp = await fetch(setting.webhook, {
           method: "POST",
           headers: request.headers,
           body: JSON.stringify(body),
         });
+        console.log(resp.statusText);
       }
       return new Response("", { status: 200 });
     }
