@@ -36,7 +36,7 @@ export default {
       });
     } else {
       // If defualt branch
-      const setting = JSON.parse(REPO_GROUP).find(
+      const setting = JSON.parse(env.REPO_GROUP).find(
         (group) => group.repo === body.repository.full_name
       );
       if (setting !== undefined) {
