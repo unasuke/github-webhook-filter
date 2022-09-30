@@ -10,7 +10,7 @@ This is a Cloudflare Worker that filters GitHub push webhook. On received push e
   {
     "repo": "owner/repo1",
     "webhook": "https://example.com/foo-webhook-endpoint"
-  }
+  },
   {
     "repo": "owner/repo2",
     "webhook": "https://example.com/bar-webhook-endpoint"
